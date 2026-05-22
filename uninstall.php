@@ -9,6 +9,8 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) exit;
 $option_names = [
   'gs_head_scripts',
   'gs_footer_scripts',
+  'gs_disable_for_admins',
+  'gs_disable_for_logged_in',
 ];
 
 // Loop through multisite if present, deleting options for each site
