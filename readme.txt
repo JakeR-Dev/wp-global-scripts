@@ -4,7 +4,7 @@ Tags: scripts, tracking, header, footer, analytics
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,6 +70,11 @@ Yes. Uninstall deletes gs_head_scripts and gs_footer_scripts. On multisite, it r
 
 == Changelog ==
 
+= 2.1.1 =
+
+* Updated plugin banner assets to reflect the WP Global Scripts name
+* Added final screenshots for plugin listing and documentation
+
 = 2.1.0 =
 
 * Updated settings page styling in admin-page.php, including success notice accent color adjustments
@@ -108,6 +113,10 @@ Yes. Uninstall deletes gs_head_scripts and gs_footer_scripts. On multisite, it r
 * Added uninstall cleanup for saved options
 
 == Upgrade Notice ==
+
+= 2.1.1 =
+
+Updates plugin banners to reflect the new name and adds final screenshots.
 
 = 2.1.0 =
 

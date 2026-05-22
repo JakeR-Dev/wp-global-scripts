@@ -74,6 +74,11 @@ In multisite, cleanup runs for each site.
 
 ## Changelog
 
+## 2.1.1
+
+- Updated plugin banner assets to reflect the WP Global Scripts name.
+- Added final screenshots for plugin listing and documentation.
+
 ## 2.1.0
 
 - Updated settings page styling in admin-page.php, including success notice accent color adjustments.
