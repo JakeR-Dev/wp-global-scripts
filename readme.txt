@@ -4,13 +4,18 @@ Tags: scripts, tracking, header, footer, analytics
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 A lightweight solution for adding and managing global tracking scripts. Scripts can be added to the head and footer via an admin settings panel.
 
-The plugin includes icon assets in the /assets directory for a more polished plugin listing.
+The plugin includes banner and icon assets in the /assets directory for a more polished plugin listing.
+
+WordPress.org will automatically use the standard banner filenames when they are present:
+
+* assets/banner-772x250.png
+* assets/banner-1544x500.png
 
 WordPress.org will automatically use the standard icon filenames when they are present:
 
@@ -58,6 +63,16 @@ Yes. Uninstall deletes gs_head_scripts and gs_footer_scripts. On multisite, it r
 
 == Changelog ==
 
+= 1.2.1 =
+
+* Polished documentation and asset notes
+* Updated release metadata and versioning
+
+= 1.2.0 =
+
+* Added plugin banner assets for standard and high-density displays
+* Added plugin icon assets for a polished plugin listing
+
 = 1.1.0 =
 
 * Added Global Scripts settings page
@@ -67,6 +82,14 @@ Yes. Uninstall deletes gs_head_scripts and gs_footer_scripts. On multisite, it r
 * Added uninstall cleanup for saved options
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+
+Polishes plugin documentation and release metadata.
+
+= 1.2.0 =
+
+Adds plugin listing banner and icon assets.
 
 = 1.1.0 =
 

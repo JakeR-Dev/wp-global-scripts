@@ -3,7 +3,7 @@
  * Plugin Name: Global Scripts
  * Plugin URI:  https://github.com/JakeR-Dev/global-scripts
  * Description: A lightweight solution for adding and managing global tracking scripts. Scripts can be added to the head and footer via an admin settings panel.
- * Version:     1.2.0
+ * Version:     1.2.1
  * Author:      Jake Ryan
  * License:     GPL-2.0-or-later
  * Text Domain: global-scripts
