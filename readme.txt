@@ -4,7 +4,7 @@ Tags: scripts, tracking, header, footer, analytics
 Requires at least: 5.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.1.1
+Stable tag: 2.2.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,12 @@ Yes. Uninstall deletes gsm_head_scripts and gsm_footer_scripts. On multisite, it
 
 == Changelog ==
 
+= 2.2.0 =
+
+* Finalized naming updates to align slug, text domain, and admin-facing references
+* Addressed Plugin Check compliance updates
+* Updated banner asset to reflect the Global Scripts Manager name
+
 = 2.1.1 =
 
 * Updated plugin banner assets to reflect the Global Scripts Manager name
@@ -101,6 +107,10 @@ Yes. Uninstall deletes gsm_head_scripts and gsm_footer_scripts. On multisite, it
 * Added uninstall cleanup for saved options
 
 == Upgrade Notice ==
+
+= 2.2.0 =
+
+Finalizes naming updates, Plugin Check compliance updates, and refreshed banner asset naming.
 
 = 2.1.1 =
 

@@ -20,19 +20,6 @@ The plugin provides:
 - Output controls to disable scripts for admins or all logged-in users
 - Cleanup on uninstall (deletes stored options)
 
-## Assets
-
-The plugin includes banner and icon assets in the `assets/` directory for GitHub and WordPress.org presentation:
-
-- `assets/banner-772x250.png`
-- `assets/banner-1544x500.png`
-
-- `assets/icon-20x20.png`
-- `assets/icon-128x128.png`
-- `assets/icon-256x256.png`
-
-WordPress.org will automatically use the standard banner and icon files when they are present in `assets/` with these names.
-
 ## Requirements
 
 - WordPress 5.0+
@@ -73,6 +60,12 @@ When the plugin is uninstalled, it deletes:
 In multisite, cleanup runs for each site.
 
 ## Changelog
+
+## 2.2.0
+
+- Finalized naming updates to align slug, text domain, and admin-facing references.
+- Addressed Plugin Check compliance updates.
+- Updated banner asset to reflect the Global Scripts Manager name.
 
 ## 2.1.1
 
