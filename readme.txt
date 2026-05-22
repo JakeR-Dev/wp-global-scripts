@@ -1,31 +1,18 @@
-=== WP Global Scripts ===
+=== Global Scripts Manager ===
 Contributors: jakerfluid
 Tags: scripts, tracking, header, footer, analytics
 Requires at least: 5.0
-Tested up to: 6.8
+Tested up to: 7.0
 Requires PHP: 7.4
 Stable tag: 2.1.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A lightweight solution for adding and managing global tracking scripts. Scripts can be added to the head and footer via an admin settings panel with output controls.
-
-The plugin includes banner and icon assets in the /assets directory for a more polished plugin listing.
-
-WordPress.org will automatically use the standard banner filenames when they are present:
-
-* assets/banner-772x250.png
-* assets/banner-1544x500.png
-
-WordPress.org will automatically use the standard icon filenames when they are present:
-
-* assets/icon-20x20.png
-* assets/icon-128x128.png
-* assets/icon-256x256.png
+Add trusted global scripts with separate header/footer fields and output controls.
 
 == Description ==
 
-WP Global Scripts lets administrators add site-wide script snippets without editing theme files.
+Global Scripts Manager lets administrators add site-wide script snippets without editing theme files.
 
 Features:
 
@@ -66,14 +53,15 @@ Only users with the manage_options capability.
 
 = Does uninstall remove saved data? =
 
-Yes. Uninstall deletes gs_head_scripts and gs_footer_scripts. On multisite, it removes them per site.
+Yes. Uninstall deletes gsm_head_scripts and gsm_footer_scripts. On multisite, it removes them per site.
 
 == Changelog ==
 
 = 2.1.1 =
 
-* Updated plugin banner assets to reflect the WP Global Scripts name
+* Updated plugin banner assets to reflect the Global Scripts Manager name
 * Added final screenshots for plugin listing and documentation
+* Renamed plugin branding to Global Scripts Manager for WordPress.org naming compliance
 
 = 2.1.0 =
 
@@ -82,7 +70,7 @@ Yes. Uninstall deletes gs_head_scripts and gs_footer_scripts. On multisite, it r
 
 = 2.0.0 =
 
-* Renamed plugin branding to WP Global Scripts
+* Updated plugin branding and naming
 * Added CodeMirror editor support for both script fields
 * Added output controls for admin and logged-in user sessions
 * Refreshed settings page with a polished guidance card
@@ -116,7 +104,7 @@ Yes. Uninstall deletes gs_head_scripts and gs_footer_scripts. On multisite, it r
 
 = 2.1.1 =
 
-Updates plugin banners to reflect the new name and adds final screenshots.
+Updates plugin banners and screenshots, and renames branding to Global Scripts Manager for naming compliance.
 
 = 2.1.0 =
 

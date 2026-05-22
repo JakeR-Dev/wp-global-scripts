@@ -1,23 +1,25 @@
 <?php
 /**
- * Admin page functionality for the WP Global Scripts plugin.
+ * Admin page functionality for the Global Scripts Manager plugin.
  */
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 // Add settings page to admin menu
-function gs_add_settings_page() {
+function gsm_add_settings_page() {
   add_options_page(
-    'WP Global Scripts',
+    'Global Scripts Manager',
     'Global Scripts',
     'manage_options',
-    'global-scripts',
-    'gs_render_settings_page'
+    'global-scripts-manager',
+    'gsm_render_settings_page'
   );
 }
-add_action( 'admin_menu', 'gs_add_settings_page' );
+add_action( 'admin_menu', 'gsm_add_settings_page' );
 
 // Load CodeMirror editor on the plugin settings page.
-function gs_enqueue_admin_assets( $hook_suffix ) {
-  if ( 'settings_page_global-scripts' !== $hook_suffix ) {
+function gsm_enqueue_admin_assets( $hook_suffix ) {
+  if ( 'settings_page_global-scripts-manager' !== $hook_suffix ) {
     return;
   }
 
@@ -31,52 +33,52 @@ function gs_enqueue_admin_assets( $hook_suffix ) {
 
     wp_add_inline_script(
       'wp-theme-plugin-editor',
-      "jQuery(function($){var settings={$encoded_settings};wp.codeEditor.initialize('gs_head_scripts', settings);wp.codeEditor.initialize('gs_footer_scripts', settings);});"
+      "jQuery(function($){var settings={$encoded_settings};wp.codeEditor.initialize('gsm_head_scripts', settings);wp.codeEditor.initialize('gsm_footer_scripts', settings);});"
     );
   }
 }
-add_action( 'admin_enqueue_scripts', 'gs_enqueue_admin_assets' );
+add_action( 'admin_enqueue_scripts', 'gsm_enqueue_admin_assets' );
 
 // Add a settings link to the plugin actions on the plugins page
-function gs_add_settings_link( $links ) {
-  $settings_link = '<a href="options-general.php?page=global-scripts">' . __( 'Settings', 'global-scripts' ) . '</a>';
+function gsm_add_settings_link( $links ) {
+  $settings_link = '<a href="options-general.php?page=global-scripts-manager">' . __( 'Settings', 'global-scripts-manager' ) . '</a>';
   array_unshift( $links, $settings_link );
   return $links;
 }
-add_filter( 'plugin_action_links_' . plugin_basename( dirname( __DIR__ ) . '/global-scripts.php' ), 'gs_add_settings_link' );
+add_filter( 'plugin_action_links_' . plugin_basename( dirname( __DIR__ ) . '/global-scripts-manager.php' ), 'gsm_add_settings_link' );
 
 // Register settings for head and footer scripts, and the output control checkboxes.
-function gs_register_settings() {
-  register_setting( 'global_scripts_group', 'gs_head_scripts', [
-    'sanitize_callback' => 'gs_sanitize_scripts',
+function gsm_register_settings() {
+  register_setting( 'global_scripts_group', 'gsm_head_scripts', [
+    'sanitize_callback' => 'gsm_sanitize_scripts',
     'default' => '',
   ]);
 
-  register_setting( 'global_scripts_group', 'gs_footer_scripts', [
-    'sanitize_callback' => 'gs_sanitize_scripts',
+  register_setting( 'global_scripts_group', 'gsm_footer_scripts', [
+    'sanitize_callback' => 'gsm_sanitize_scripts',
     'default' => '',
   ]);
 
-  register_setting( 'global_scripts_group', 'gs_disable_for_admins', [
-    'sanitize_callback' => 'gs_sanitize_checkbox',
+  register_setting( 'global_scripts_group', 'gsm_disable_for_admins', [
+    'sanitize_callback' => 'gsm_sanitize_checkbox',
     'default' => 0,
   ]);
 
-  register_setting( 'global_scripts_group', 'gs_disable_for_logged_in', [
-    'sanitize_callback' => 'gs_sanitize_checkbox',
+  register_setting( 'global_scripts_group', 'gsm_disable_for_logged_in', [
+    'sanitize_callback' => 'gsm_sanitize_checkbox',
     'default' => 0,
   ]);
 }
-add_action( 'admin_init', 'gs_register_settings' );
+add_action( 'admin_init', 'gsm_register_settings' );
 
 // Normalize checkbox values to 1 or 0.
-function gs_sanitize_checkbox( $input ) {
+function gsm_sanitize_checkbox( $input ) {
   return ! empty( $input ) ? 1 : 0;
 }
 
 // Utility function to sanitize script inputs
 // Allow only <script>, <noscript>, and <style> tags and their common attributes
-function gs_sanitize_scripts( $input ) {
+function gsm_sanitize_scripts( $input ) {
   return wp_kses( $input, [
     'script' => [
       'type' => true,
@@ -103,13 +105,13 @@ function gs_sanitize_scripts( $input ) {
 }
 
 // Render the actual options page
-function gs_render_settings_page() {
+function gsm_render_settings_page() {
   // Block users without the manage_options capability
   if ( ! current_user_can( 'manage_options' ) ) return; ?>
 
   <div class="wrap">
     <!-- Title -->
-    <h1><?php esc_html_e( 'WP Global Scripts', 'global-scripts' ); ?></h1>
+    <h1><?php esc_html_e( 'Global Scripts Manager', 'global-scripts-manager' ); ?></h1>
 
     <!-- Styles -->
     <style>
@@ -139,13 +141,13 @@ function gs_render_settings_page() {
 
     <!-- Intro card -->
     <div class="gs-intro-card">
-      <h2><?php esc_html_e( 'Add trusted scripts with confidence', 'global-scripts' ); ?></h2>
-      <p><?php esc_html_e( 'Use the editors below to add site-wide scripts for your header and footer.', 'global-scripts' ); ?></p>
+      <h2><?php esc_html_e( 'Add trusted scripts with confidence', 'global-scripts-manager' ); ?></h2>
+      <p><?php esc_html_e( 'Use the editors below to add site-wide scripts for your header and footer.', 'global-scripts-manager' ); ?></p>
       <ul class="gs-checklist">
-        <li><?php esc_html_e( 'Paste snippets only from trusted providers.', 'global-scripts' ); ?></li>
-        <li><?php esc_html_e( 'Use the output toggles to avoid tracking admin sessions.', 'global-scripts' ); ?></li>
-        <li><?php esc_html_e( 'Use Header Scripts for tags that must load in the site <head>.', 'global-scripts' ); ?></li>
-        <li><?php esc_html_e( 'Use Footer Scripts for tags that should run before the closing </body> tag.', 'global-scripts' ); ?></li>
+        <li><?php esc_html_e( 'Paste snippets only from trusted providers.', 'global-scripts-manager' ); ?></li>
+        <li><?php esc_html_e( 'Use the output toggles to avoid tracking admin sessions.', 'global-scripts-manager' ); ?></li>
+        <li><?php esc_html_e( 'Use Header Scripts for tags that must load in the site <head>.', 'global-scripts-manager' ); ?></li>
+        <li><?php esc_html_e( 'Use Footer Scripts for tags that should run before the closing </body> tag.', 'global-scripts-manager' ); ?></li>
       </ul>
     </div>
 
@@ -155,49 +157,49 @@ function gs_render_settings_page() {
       <table class="form-table">
         <!-- Header scripts -->
         <tr>
-          <th scope="row"><label for="gs_head_scripts"><?php esc_html_e( 'Header Scripts', 'global-scripts' ); ?></label></th>
+          <th scope="row"><label for="gsm_head_scripts"><?php esc_html_e( 'Header Scripts', 'global-scripts-manager' ); ?></label></th>
           <td>
-            <textarea id="gs_head_scripts" name="gs_head_scripts" rows="8" class="large-text code"><?php echo esc_textarea( get_option( 'gs_head_scripts' ) ); ?></textarea>
-            <p class="description"><?php esc_html_e( 'Scripts added here will output inside &lt;head&gt; on every page.', 'global-scripts' ); ?></p>
+            <textarea id="gsm_head_scripts" name="gsm_head_scripts" rows="8" class="large-text code"><?php echo esc_textarea( get_option( 'gsm_head_scripts' ) ); ?></textarea>
+            <p class="description"><?php esc_html_e( 'Scripts added here will output inside &lt;head&gt; on every page.', 'global-scripts-manager' ); ?></p>
           </td>
         </tr>
         <!-- Footer scripts -->
         <tr>
-          <th scope="row"><label for="gs_footer_scripts"><?php esc_html_e( 'Footer Scripts', 'global-scripts' ); ?></label></th>
+          <th scope="row"><label for="gsm_footer_scripts"><?php esc_html_e( 'Footer Scripts', 'global-scripts-manager' ); ?></label></th>
           <td>
-            <textarea id="gs_footer_scripts" name="gs_footer_scripts" rows="8" class="large-text code"><?php echo esc_textarea( get_option( 'gs_footer_scripts' ) ); ?></textarea>
-            <p class="description"><?php esc_html_e( 'Scripts added here will output before &lt;/body&gt; on every page.', 'global-scripts' ); ?></p>
+            <textarea id="gsm_footer_scripts" name="gsm_footer_scripts" rows="8" class="large-text code"><?php echo esc_textarea( get_option( 'gsm_footer_scripts' ) ); ?></textarea>
+            <p class="description"><?php esc_html_e( 'Scripts added here will output before &lt;/body&gt; on every page.', 'global-scripts-manager' ); ?></p>
           </td>
         </tr>
         <!-- Output controls -->
         <tr>
-          <th scope="row"><?php esc_html_e( 'Output Controls', 'global-scripts' ); ?></th>
+          <th scope="row"><?php esc_html_e( 'Output Controls', 'global-scripts-manager' ); ?></th>
           <td>
             <fieldset>
               <!-- Disable for admins -->
-              <label for="gs_disable_for_admins">
+              <label for="gsm_disable_for_admins">
                 <input
-                  id="gs_disable_for_admins"
-                  name="gs_disable_for_admins"
+                  id="gsm_disable_for_admins"
+                  name="gsm_disable_for_admins"
                   type="checkbox"
                   value="1"
-                  <?php checked( 1, (int) get_option( 'gs_disable_for_admins', 0 ) ); ?>
+                  <?php checked( 1, (int) get_option( 'gsm_disable_for_admins', 0 ) ); ?>
                 />
-                <?php esc_html_e( 'Do not output scripts for administrators.', 'global-scripts' ); ?>
+                <?php esc_html_e( 'Do not output scripts for administrators.', 'global-scripts-manager' ); ?>
               </label>
               <br />
               <!-- Disable for all logged-in users -->
-              <label for="gs_disable_for_logged_in">
+              <label for="gsm_disable_for_logged_in">
                 <input
-                  id="gs_disable_for_logged_in"
-                  name="gs_disable_for_logged_in"
+                  id="gsm_disable_for_logged_in"
+                  name="gsm_disable_for_logged_in"
                   type="checkbox"
                   value="1"
-                  <?php checked( 1, (int) get_option( 'gs_disable_for_logged_in', 0 ) ); ?>
+                  <?php checked( 1, (int) get_option( 'gsm_disable_for_logged_in', 0 ) ); ?>
                 />
-                <?php esc_html_e( 'Do not output scripts for all logged-in users.', 'global-scripts' ); ?>
+                <?php esc_html_e( 'Do not output scripts for all logged-in users.', 'global-scripts-manager' ); ?>
               </label>
-              <p class="description"><?php esc_html_e( 'If both are enabled, script output is disabled for any logged-in user.', 'global-scripts' ); ?></p>
+              <p class="description"><?php esc_html_e( 'If both are enabled, script output is disabled for any logged-in user.', 'global-scripts-manager' ); ?></p>
             </fieldset>
           </td>
         </tr>

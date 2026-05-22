@@ -1,4 +1,4 @@
-# WP Global Scripts
+# Global Scripts Manager
 
 ![Global Scripts banner](assets/banner-1544x500.png)
 
@@ -6,7 +6,7 @@ A lightweight WordPress solution for adding and managing global tracking scripts
 
 ## Description
 
-WP Global Scripts lets site administrators add trusted tracking or utility snippets that load site-wide without editing theme files.
+Global Scripts Manager lets site administrators add trusted tracking or utility snippets that load site-wide without editing theme files.
 
 The plugin provides:
 
@@ -41,7 +41,7 @@ WordPress.org will automatically use the standard banner and icon files when the
 
 ## Installation
 
-1. Upload the `global-scripts` folder to `/wp-content/plugins/`, or install through the WordPress Plugins screen.
+1. Upload the `global-scripts-manager` folder to `/wp-content/plugins/`, or install through the WordPress Plugins screen.
 2. Activate the plugin.
 3. Go to **Settings > Global Scripts**.
 4. Add your scripts to the Header Scripts and/or Footer Scripts fields.
@@ -51,11 +51,11 @@ WordPress.org will automatically use the standard banner and icon files when the
 
 ### Header Scripts
 
-Content saved in `gs_head_scripts` is printed in the `<head>` on every frontend page.
+Content saved in `gsm_head_scripts` is printed in the `<head>` on every frontend page.
 
 ### Footer Scripts
 
-Content saved in `gs_footer_scripts` is printed before `</body>` on every frontend page.
+Content saved in `gsm_footer_scripts` is printed before `</body>` on every frontend page.
 
 ## Security Notes
 
@@ -67,8 +67,8 @@ Content saved in `gs_footer_scripts` is printed before `</body>` on every fronte
 
 When the plugin is uninstalled, it deletes:
 
-- `gs_head_scripts`
-- `gs_footer_scripts`
+- `gsm_head_scripts`
+- `gsm_footer_scripts`
 
 In multisite, cleanup runs for each site.
 
@@ -76,8 +76,9 @@ In multisite, cleanup runs for each site.
 
 ## 2.1.1
 
-- Updated plugin banner assets to reflect the WP Global Scripts name.
+- Updated plugin banner assets to reflect the Global Scripts Manager name.
 - Added final screenshots for plugin listing and documentation.
+- Renamed plugin branding to Global Scripts Manager for WordPress.org naming compliance.
 
 ## 2.1.0
 
@@ -86,7 +87,7 @@ In multisite, cleanup runs for each site.
 
 ## 2.0.0
 
-- Renamed plugin branding to WP Global Scripts.
+- Updated plugin branding and naming.
 - Added CodeMirror editor support for both script fields.
 - Added output controls for admin and logged-in user sessions.
 - Refreshed the settings page with a polished guidance card.
