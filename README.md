@@ -34,6 +34,15 @@ The plugin provides:
 4. Add your scripts to the Header Scripts and/or Footer Scripts fields.
 5. Click **Save Changes**.
 
+## Build Zip
+
+From the plugin root, create a release zip in `dist/` while excluding hidden and git files:
+
+```bash
+mkdir -p dist
+( cd .. && zip -r "global-scripts-manager/dist/global-scripts-manager.zip" "global-scripts-manager" -x "global-scripts-manager/dist/*" "*/.git/*" "*/.gitignore" "*/.DS_Store" "__MACOSX/*" "*/__MACOSX/*" )
+```
+
 ## Usage
 
 ### Header Scripts
