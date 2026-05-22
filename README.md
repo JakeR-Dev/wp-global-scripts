@@ -2,7 +2,7 @@
 
 ![Global Scripts banner](assets/banner-1544x500.png)
 
-A lightweight solution for adding and managing global tracking scripts. Scripts can be added to the head and footer via an admin settings panel.
+A lightweight WordPress solution for adding and managing global tracking scripts. Scripts can be added to the head and footer via an admin settings panel.
 
 ## Description
 
