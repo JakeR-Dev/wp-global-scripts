@@ -4,7 +4,7 @@ Tags: scripts, tracking, header, footer, analytics
 Requires at least: 5.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.2.0
+Stable tag: 2.3.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,10 @@ Features:
 * Code editor for script fields
 * Separate Header Scripts and Footer Scripts fields
 * Input sanitization on save
+* Settings access restricted to users with unfiltered_html capability
+* Script field updates restricted to users with unfiltered_html capability
 * Safety acknowledgement required before saving or outputting scripts
+* Frontend output remains disabled until acknowledgement is enabled
 * Frontend output in wp_head and wp_footer
 * Output controls to disable scripts for admins or all logged-in users
 * Option cleanup on uninstall
@@ -50,13 +53,22 @@ Footer scripts are output before </body> using wp_footer.
 
 = Who can manage these settings? =
 
-Only users with the manage_options capability.
+Only users with the unfiltered_html capability.
 
 = Does uninstall remove saved data? =
 
 Yes. Uninstall deletes gsm_head_scripts and gsm_footer_scripts. On multisite, it removes them per site.
 
 == Changelog ==
+
+= 2.3.0 =
+
+* Restricted settings page access and settings link visibility to users with unfiltered_html capability
+* Enforced unfiltered_html capability when saving script fields
+* Added required safety acknowledgement before script content can be saved
+* Disabled frontend script output until safety acknowledgement is enabled
+* Added contextual admin warning when scripts are present but output is gated by acknowledgement
+* Added uninstall cleanup for the safety acknowledgement option
 
 = 2.2.0 =
 
@@ -108,6 +120,10 @@ Yes. Uninstall deletes gsm_head_scripts and gsm_footer_scripts. On multisite, it
 * Added uninstall cleanup for saved options
 
 == Upgrade Notice ==
+
+= 2.3.0 =
+
+Adds stronger security controls for script management, including unfiltered_html access enforcement, required safety acknowledgement for script saves, and output gating until acknowledgement is enabled.
 
 = 2.2.0 =
 
