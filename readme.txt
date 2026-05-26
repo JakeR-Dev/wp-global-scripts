@@ -20,6 +20,7 @@ Features:
 * Code editor for script fields
 * Separate Header Scripts and Footer Scripts fields
 * Input sanitization on save
+* Safety acknowledgement required before saving or outputting scripts
 * Frontend output in wp_head and wp_footer
 * Output controls to disable scripts for admins or all logged-in users
 * Option cleanup on uninstall

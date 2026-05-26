@@ -8,6 +8,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Determine if script output should be skipped for this request.
 function gsm_should_skip_output() {
+  // Keep all script output disabled until an admin explicitly acknowledges risk.
+  if ( (int) get_option( 'gsm_acknowledge_script_risk', 0 ) !== 1 ) {
+    return true;
+  }
+
   // Block for logged in users if the option is enabled
   if ( (int) get_option( 'gsm_disable_for_logged_in', 0 ) === 1 && is_user_logged_in() ) {
     return true;

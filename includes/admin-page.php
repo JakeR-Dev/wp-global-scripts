@@ -5,12 +5,16 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-// Add settings page to admin menu
+// Add settings page to admin menu (for users with unfiltered_html capability only)
 function gsm_add_settings_page() {
+  if ( ! current_user_can( 'unfiltered_html' ) ) {
+    return;
+  }
+
   add_options_page(
     'Global Scripts Manager',
     'Global Scripts',
-    'manage_options',
+    'unfiltered_html',
     'global-scripts-manager',
     'gsm_render_settings_page'
   );
@@ -44,8 +48,12 @@ function gsm_enqueue_admin_assets( $hook_suffix ) {
 }
 add_action( 'admin_enqueue_scripts', 'gsm_enqueue_admin_assets' );
 
-// Add a settings link to the plugin actions on the plugins page
+// Add a settings link to the plugin actions on the plugins page (for users with unfiltered_html capability only)
 function gsm_add_settings_link( $links ) {
+  if ( ! current_user_can( 'unfiltered_html' ) ) {
+    return $links;
+  }
+
   $settings_link = '<a href="options-general.php?page=global-scripts-manager">' . __( 'Settings', 'global-scripts-manager' ) . '</a>';
   array_unshift( $links, $settings_link );
   return $links;
@@ -55,12 +63,12 @@ add_filter( 'plugin_action_links_' . plugin_basename( dirname( __DIR__ ) . '/glo
 // Register settings for head and footer scripts, and the output control checkboxes.
 function gsm_register_settings() {
   register_setting( 'global_scripts_group', 'gsm_head_scripts', [
-    'sanitize_callback' => 'gsm_sanitize_scripts',
+    'sanitize_callback' => 'gsm_sanitize_head_scripts',
     'default' => '',
   ]);
 
   register_setting( 'global_scripts_group', 'gsm_footer_scripts', [
-    'sanitize_callback' => 'gsm_sanitize_scripts',
+    'sanitize_callback' => 'gsm_sanitize_footer_scripts',
     'default' => '',
   ]);
 
@@ -73,6 +81,11 @@ function gsm_register_settings() {
     'sanitize_callback' => 'gsm_sanitize_checkbox',
     'default' => 0,
   ]);
+
+  register_setting( 'global_scripts_group', 'gsm_acknowledge_script_risk', [
+    'sanitize_callback' => 'gsm_sanitize_checkbox',
+    'default' => 0,
+  ]);
 }
 add_action( 'admin_init', 'gsm_register_settings' );
 
@@ -81,10 +94,30 @@ function gsm_sanitize_checkbox( $input ) {
   return ! empty( $input ) ? 1 : 0;
 }
 
+// Detect whether risk acknowledgement is enabled in the current settings submission.
+function gsm_is_risk_acknowledged_in_request() {
+  if ( ! isset( $_POST['gsm_acknowledge_script_risk'] ) ) {
+    return false;
+  }
+
+  $submitted_value = sanitize_text_field( wp_unslash( $_POST['gsm_acknowledge_script_risk'] ) );
+  return '1' === $submitted_value;
+}
+
+// Sanitize the head scripts
+function gsm_sanitize_head_scripts( $input ) {
+  return gsm_sanitize_scripts( $input, 'gsm_head_scripts' );
+}
+
+// Sanitize the footer scripts
+function gsm_sanitize_footer_scripts( $input ) {
+  return gsm_sanitize_scripts( $input, 'gsm_footer_scripts' );
+}
+
 // Utility function to sanitize script inputs
 // Allow only <script>, <noscript>, and <style> tags and their common attributes
-function gsm_sanitize_scripts( $input ) {
-  return wp_kses( $input, [
+function gsm_sanitize_scripts( $input, $option_name ) {
+  $sanitized_input = wp_kses( $input, [
     'script' => [
       'type' => true,
       'src' => true,
@@ -107,23 +140,72 @@ function gsm_sanitize_scripts( $input ) {
       'data-*' => true,
     ],
   ]);
+
+  // Block users who don't have the unfiltered_html capability from saving scripts
+  // Only show the notice once per request.
+  if ( ! current_user_can( 'unfiltered_html' ) ) {
+    static $capability_notice_added = false;
+
+    if ( ! $capability_notice_added ) {
+      add_settings_error(
+        'global_scripts_group',
+        'gsm_unfiltered_html_required',
+        __( 'Your account is not allowed to save script content on this site. Please contact your site administrator if you believe this is an error.', 'global-scripts-manager' ),
+        'error'
+      );
+
+      $capability_notice_added = true;
+    }
+
+    return (string) get_option( $option_name, '' );
+  }
+
+  // Block script changes unless the user has explicitly acknowledged the risk.
+  if ( ! gsm_is_risk_acknowledged_in_request() && '' !== trim( $sanitized_input ) ) {
+    static $validation_notice_added = false;
+
+    if ( ! $validation_notice_added ) {
+      add_settings_error(
+        'global_scripts_group',
+        'gsm_risk_acknowledgement_required',
+        __( 'To save Header or Footer Scripts, you must enable the safety acknowledgement checkbox below.', 'global-scripts-manager' ),
+        'error'
+      );
+
+      $validation_notice_added = true;
+    }
+
+    return (string) get_option( $option_name, '' );
+  }
+
+  return $sanitized_input;
 }
 
 // Render the actual options page
 function gsm_render_settings_page() {
-  // Block users without the manage_options capability (administrators only)
-  if ( ! current_user_can( 'manage_options' ) ) return; ?>
+  // Block users without the unfiltered_html capability.
+  if ( ! current_user_can( 'unfiltered_html' ) ) return;
+
+  $risk_acknowledged = (int) get_option( 'gsm_acknowledge_script_risk', 0 ) === 1;
+  $scripts_present = ! empty( get_option( 'gsm_head_scripts', '' ) ) || ! empty( get_option( 'gsm_footer_scripts', '' ) ); ?>
 
   <div class="wrap">
     <!-- Title -->
     <h1><?php esc_html_e( 'Global Scripts Manager', 'global-scripts-manager' ); ?></h1>
 
+    <?php if ( $scripts_present && ! $risk_acknowledged ) : ?>
+      <div class="notice notice-warning inline">
+        <p><?php esc_html_e( 'Script output is currently disabled. Enable the safety acknowledgement below to activate saved scripts.', 'global-scripts-manager' ); ?></p>
+      </div>
+    <?php endif; ?>
+
     <!-- Intro card -->
     <div class="gs-intro-card">
-      <h2><?php esc_html_e( 'Add trusted scripts with confidence', 'global-scripts-manager' ); ?></h2>
+      <h2><?php esc_html_e( 'Warning: Add scripts with caution', 'global-scripts-manager' ); ?></h2>
+      <p><strong><?php esc_html_e( 'Using untrusted scripts can compromise your site\'s security and reliability.', 'global-scripts-manager' ); ?></strong></p>
       <p><?php esc_html_e( 'Use the editors below to add site-wide scripts for your header and footer.', 'global-scripts-manager' ); ?></p>
       <ul class="gs-checklist">
-        <li><?php esc_html_e( 'Paste snippets only from trusted providers.', 'global-scripts-manager' ); ?></li>
+        <li><?php esc_html_e( 'Use snippets only from trusted providers.', 'global-scripts-manager' ); ?></li>
         <li><?php esc_html_e( 'Use the output toggles to avoid tracking admin sessions.', 'global-scripts-manager' ); ?></li>
         <li><?php esc_html_e( 'Use Header Scripts for tags that must load in the site <head>.', 'global-scripts-manager' ); ?></li>
         <li><?php esc_html_e( 'Use Footer Scripts for tags that should run before the closing </body> tag.', 'global-scripts-manager' ); ?></li>
@@ -179,6 +261,25 @@ function gsm_render_settings_page() {
                 <?php esc_html_e( 'Do not output scripts for all logged-in users.', 'global-scripts-manager' ); ?>
               </label>
               <p class="description"><?php esc_html_e( 'If both are enabled, script output is disabled for any logged-in user.', 'global-scripts-manager' ); ?></p>
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><?php esc_html_e( 'Safety Acknowledgement', 'global-scripts-manager' ); ?></th>
+          <td>
+            <fieldset>
+              <input type="hidden" name="gsm_acknowledge_script_risk" value="0" />
+              <label for="gsm_acknowledge_script_risk">
+                <input
+                  id="gsm_acknowledge_script_risk"
+                  name="gsm_acknowledge_script_risk"
+                  type="checkbox"
+                  value="1"
+                  <?php checked( 1, (int) get_option( 'gsm_acknowledge_script_risk', 0 ) ); ?>
+                />
+                <?php esc_html_e( 'I understand these scripts run site-wide and I have verified they are safe and trusted.', 'global-scripts-manager' ); ?>
+              </label>
+              <p class="description"><?php esc_html_e( 'Scripts are not saved or output until this acknowledgement is enabled.', 'global-scripts-manager' ); ?></p>
             </fieldset>
           </td>
         </tr>

@@ -11,6 +11,7 @@ $option_names = [
   'gsm_footer_scripts',
   'gsm_disable_for_admins',
   'gsm_disable_for_logged_in',
+  'gsm_acknowledge_script_risk',
 ];
 
 // Loop through multisite if present, deleting options for each site

@@ -18,6 +18,7 @@ The plugin provides:
   - Header scripts via `wp_head` (priority `1`)
   - Footer scripts via `wp_footer` (priority `100`)
 - Output controls to disable scripts for admins or all logged-in users
+- Explicit safety acknowledgement required before script content is saved or output
 - Cleanup on uninstall (deletes stored options)
 
 ## Requirements
@@ -57,6 +58,8 @@ Content saved in `gsm_footer_scripts` is printed before `</body>` on every front
 
 - Only users with `manage_options` can edit plugin settings.
 - Inputs are sanitized on save.
+- Header/Footer script changes are blocked until the safety acknowledgement checkbox is enabled.
+- Frontend output remains disabled unless acknowledgement is enabled.
 - Use trusted snippets only.
 
 ## Uninstall Behavior
