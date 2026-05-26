@@ -17,15 +17,17 @@ function gsm_add_settings_page() {
 }
 add_action( 'admin_menu', 'gsm_add_settings_page' );
 
-// Load CodeMirror editor on the plugin settings page.
+// Load assets on the plugin settings page.
 function gsm_enqueue_admin_assets( $hook_suffix ) {
+  // Make sure we're on the GSM settings page before loading assets
   if ( 'settings_page_global-scripts-manager' !== $hook_suffix ) {
     return;
   }
 
+  // Load Codemirror assets for the header and footer script textareas
   $editor_settings = wp_enqueue_code_editor( [ 'type' => 'text/html' ] );
 
-  if ( false !== $editor_settings ) {
+  if ( $editor_settings !== false ) {
     wp_enqueue_script( 'wp-theme-plugin-editor' );
     wp_enqueue_style( 'wp-codemirror' );
 
@@ -36,6 +38,9 @@ function gsm_enqueue_admin_assets( $hook_suffix ) {
       "jQuery(function($){var settings={$encoded_settings};wp.codeEditor.initialize('gsm_head_scripts', settings);wp.codeEditor.initialize('gsm_footer_scripts', settings);});"
     );
   }
+
+  // Load plugin stylesheet
+  wp_enqueue_style( 'gsm-admin-styles', plugin_dir_url( __DIR__ ) . 'assets/styles.css', [], '1.0' );
 }
 add_action( 'admin_enqueue_scripts', 'gsm_enqueue_admin_assets' );
 
@@ -106,38 +111,12 @@ function gsm_sanitize_scripts( $input ) {
 
 // Render the actual options page
 function gsm_render_settings_page() {
-  // Block users without the manage_options capability
+  // Block users without the manage_options capability (administrators only)
   if ( ! current_user_can( 'manage_options' ) ) return; ?>
 
   <div class="wrap">
     <!-- Title -->
     <h1><?php esc_html_e( 'Global Scripts Manager', 'global-scripts-manager' ); ?></h1>
-
-    <!-- Styles -->
-    <style>
-      .gs-intro-card {
-        margin: 14px 0 18px;
-        padding: 16px 18px;
-        border: 1px solid #dcdcde;
-        border-left: 4px solid #1E1E2E;
-        border-radius: 4px;
-        background: #fff;
-      }
-      .gs-intro-card h2 {
-        margin: 0 0 8px;
-      }
-      .gs-intro-card p {
-        margin: 0 0 8px;
-      }
-      .gs-checklist {
-        margin: 0;
-        padding-left: 14px;
-        list-style: disc;
-      }
-      .notice-success {
-        border-left-color: #7C6AF7;
-      }
-    </style>
 
     <!-- Intro card -->
     <div class="gs-intro-card">

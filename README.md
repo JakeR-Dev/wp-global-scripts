@@ -10,7 +10,7 @@ Global Scripts Manager lets site administrators add trusted tracking or utility 
 
 The plugin provides:
 
-- A settings page at **Settings > Global Scripts**
+- A settings page at **Settings > Global Scripts** visible only to site administrators
 - Code editor support for both script fields
 - Separate fields for header and footer scripts
 - Sanitization on save using `wp_kses`
@@ -28,7 +28,7 @@ The plugin provides:
 
 ## Installation
 
-1. Upload the `global-scripts-manager` folder to `/wp-content/plugins/`, or install through the WordPress Plugins screen.
+1. Upload the `dist/global-scripts-manager.zip` zipped folder to `/wp-content/plugins/`, or install through the WordPress Plugins screen.
 2. Activate the plugin.
 3. Go to **Settings > Global Scripts**.
 4. Add your scripts to the Header Scripts and/or Footer Scripts fields.

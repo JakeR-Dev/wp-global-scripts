@@ -1,0 +1,22 @@
+.gs-intro-card {
+  margin: 14px 0 18px;
+  padding: 16px 18px;
+  border: 1px solid #dcdcde;
+  border-left: 4px solid #1E1E2E;
+  border-radius: 4px;
+  background: #fff;
+}
+.gs-intro-card h2 {
+  margin: 0 0 8px;
+}
+.gs-intro-card p {
+  margin: 0 0 8px;
+}
+.gs-checklist {
+  margin: 0;
+  padding-left: 14px;
+  list-style: disc;
+}
+.settings_page_global-scripts-manager .notice-success {
+  border-left-color: #7C6AF7;
+}
